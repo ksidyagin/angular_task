@@ -1,0 +1,39 @@
+<div class="currency_exchange">
+    <div class="currency_exchange__header">
+        <div class="header__selected_currency">
+            <div class="selected_currency-title">
+                Currency RUB
+            </div>
+            <div class="selected_currency-lastdate">
+                {{ clock}}
+            </div>
+        </div>
+        <div [matMenuTriggerFor]="menu" class="header_add-item">
+            <div mat-button color="primary" class="add-item__btn">
+                +
+            </div>
+            <mat-menu #menu="matMenu">
+                <button (click)="onClick(option)" *ngFor="let option of additional_currencies" mat-menu-item>
+                    {{option}}
+                </button>
+        </mat-menu>
+        </div>
+    </div>
+    <div class="currency_exchange__items">
+        <div *ngFor="let currency of currencies" class="currency_exchange__item">
+            <div class="item__name">
+                {{currency.base_code}}
+            </div>
+            <div class="item__data">
+                <div class="item__data-price">
+                    {{currency.conversion_rate}}
+                </div>
+                <div class="item__data-difference">
+                    <div *ngIf="currency.difference > 0" class="triangle-up"></div>
+                    <div *ngIf="currency.difference < 0" class="triangle-down"></div>
+                    ({{currency.difference}})
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
