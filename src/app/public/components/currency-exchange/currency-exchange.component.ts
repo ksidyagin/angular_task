@@ -33,29 +33,31 @@ export class CurrencyExchangeComponent implements OnInit {
     let month = dateObj.getUTCMonth() + 1;
     let day = dateObj.getUTCDate();
     let year = dateObj.getUTCFullYear()
-    for (let i = 0; i < this.currencies.length; i++){
-      this.exchangeService.get_current_exchange(this.currencies[i].base_code, this.currencies[i].target_code).subscribe(
-        result =>{
-          this.currencies[i].conversion_rate = result.conversion_rate
-          this.exchangeService.get_previous_exchange(this.currencies[i].base_code, year, month, day).subscribe(
+
+    this.timerSubscription = timer(0, this.interval_update).pipe( 
+      map(() => { 
+        for (let i = 0; i < this.currencies.length; i++){
+          this.exchangeService.get_current_exchange(this.currencies[i].base_code, this.currencies[i].target_code).subscribe(
             result =>{
-              this.currencies[i].difference = Math.round(100000 * (this.currencies[i].conversion_rate - result.conversion_rates.RUB)) / 100000
-              
+              this.currencies[i].conversion_rate = result.conversion_rate
+              this.exchangeService.get_previous_exchange(this.currencies[i].base_code, year, month, day).subscribe(
+                result =>{
+                  this.currencies[i].difference = Math.round(100000 * (this.currencies[i].conversion_rate - result.conversion_rates.RUB)) / 100000
+
+                }
+              )
             }
           )
         }
-      )
-    }
-
-    // this.timerSubscription = timer(0, this.interval_update).pipe( 
-    //   map(() => { 
-
-    //   }) 
-    // ).subscribe();
+      }) 
+    ).subscribe();
     
   }
 
   onClick(option:Currencies):void{
+    if(this.currencies.find(item => item.base_code == option)){
+      return;
+    }
     let date_msec = Date.now() - (24 * 3600 * 1000);
     const dateObj = new Date(date_msec);
     let month = dateObj.getUTCMonth() + 1;
