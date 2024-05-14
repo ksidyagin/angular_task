@@ -11,7 +11,7 @@ import { DatePipe } from '@angular/common';
 })
 
 export class CurrencyExchangeComponent implements OnInit {
-  private interval_update = 60000;
+  private interval_update = 5000;
   additional_currencies = [Currencies.CNY,Currencies.JPY, Currencies.TRY];
   clock:any;
   currencies:CurrencyPairI[] = [
